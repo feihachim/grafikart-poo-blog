@@ -12,8 +12,7 @@ class App
 
     public static function getInstance()
     {
-        if (is_null(self::$_instance))
-        {
+        if (is_null(self::$_instance)) {
             self::$_instance = new App();
         }
         return self::$_instance;
@@ -39,8 +38,7 @@ class App
     public function getDb()
     {
         $config = Config::getInstance(ROOT . '/config/config.php');
-        if (is_null($this->db_instance))
-        {
+        if (is_null($this->db_instance)) {
             $this->db_instance = new MySQLDatabase($config->get('db_name'), $config->get('db_user'), $config->get('db_password'), $config->get('db_host'));
         }
         return $this->db_instance;
@@ -48,6 +46,13 @@ class App
 
     public function notFound()
     {
-        require ROOT . '/pages/404.php';
+        header('HTTP/1.0 404 Not Found');
+        die('Page introuvable');
+    }
+
+    public function forbidden()
+    {
+        header('HTTP/1.0 403 Forbidden');
+        die('Accès interdit');
     }
 }
