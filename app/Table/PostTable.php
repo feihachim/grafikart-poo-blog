@@ -38,9 +38,9 @@ class PostTable extends Table
      * @param int $id
      * @return \App\Entity\PostEntity
      */
-    public function find($id)
+    public function findWithCategory($id)
     {
-        return $this->query("SELECT articles.id,articles.title,articles.content,articles.date,categories.title AS category 
+        return $this->query("SELECT articles.id,articles.title,articles.content,articles.date,categories.title AS category,articles.category_id 
         FROM articles 
         LEFT JOIN categories ON category_id=categories.id 
         WHERE articles.id=?", [$id], true);

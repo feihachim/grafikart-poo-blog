@@ -4,21 +4,26 @@ define('ROOT', dirname(__DIR__));
 require ROOT . '/app/App.php';
 App::load();
 
-if (isset($_GET['page'])) {
+if (isset($_GET['page']))
+{
     $page = $_GET['page'];
-} else {
-    $page = 'home';
+}
+else
+{
+    $page = 'posts.index';
 }
 
-ob_start();
-if ($page === 'home') {
-    require ROOT . '/pages/posts/home.php';
-} elseif ($page === 'posts.category') {
-    require ROOT . '/pages/posts/category.php';
-} elseif ($page === 'posts.show') {
-    require ROOT . '/pages/posts/show.php';
-} elseif ($page === 'login') {
-    require ROOT . '/pages/users/login.php';
+$page = explode('.', $page);
+
+if ($page[0] === 'admin')
+{
+    $controller = '\App\Controller\Admin\\' . ucfirst($page[1]) . 'Controller';
+    $action = $page[2];
 }
-$content = ob_get_clean();
-require ROOT . '/pages/templates/default.php';
+else
+{
+    $controller = '\App\Controller\\' . ucfirst($page[0]) . 'Controller';
+    $action = $page[1];
+}
+$controller = new $controller();
+$controller->$action();

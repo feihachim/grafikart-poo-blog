@@ -2,16 +2,25 @@
 
 namespace Core\Auth;
 
-use Core\Database\Database;
+use Core\Database\MySQLDatabase;
 
 class DBAuth
 {
 
     private $db;
 
-    public function __construct(Database $db)
+    public function __construct(MySQLDatabase $db)
     {
         $this->db = $db;
+    }
+
+    public function getUserId()
+    {
+        if ($this->logged())
+        {
+            return $_SESSION['auth'];
+        }
+        return false;
     }
 
     /**
@@ -22,8 +31,10 @@ class DBAuth
     public function login($username, $password)
     {
         $user = $this->db->prepare("SELECT * FROM users WHERE username=?", [$username], null, true);
-        if ($user) {
-            if ($user->password === sha1($password)) {
+        if ($user)
+        {
+            if ($user->password === sha1($password))
+            {
                 $_SESSION['auth'] = $user->id;
                 return true;
             }

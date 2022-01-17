@@ -41,6 +41,10 @@ class Form
      */
     protected function getValue($index)
     {
+        if (is_object($this->data))
+        {
+            return $this->data->$index;
+        }
         return  $this->data[$index] ?? null;
     }
 
